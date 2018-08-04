@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Build Images
           command: |
-            docker build --build-arg NPM_TOKEN=${NPM_TOKEN} --file ./chrome/Dockerfile --cache-from=projectstorm -t projectstorm/chrome:${CIRCLE_TAG} .
+            docker build --build-arg NPM_TOKEN=${NPM_TOKEN} --file ./chrome/Dockerfile --cache-from=projectstorm -t "projectstorm/chrome:${CIRCLE_TAG}" .
       - run:
           name: Push Images
           command: |
