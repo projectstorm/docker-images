@@ -24,6 +24,7 @@ jobs:
       - run:
           name: Push Images
           command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push "projectstorm/chrome"
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
