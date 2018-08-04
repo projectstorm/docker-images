@@ -20,11 +20,13 @@ jobs:
       - run:
           name: Build Images
           command: |
+            docker build --file ./ci/Dockerfile --cache-from=projectstorm -t "projectstorm/ci:latest" .
             docker build --file ./chrome/Dockerfile --cache-from=projectstorm -t "projectstorm/chrome:latest" .
       - run:
           name: Push Images
           command: |
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push "projectstorm/ci"
             docker push "projectstorm/chrome"
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
