@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      # - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/projectstorm.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/projectstorm.tar | true
+      - run:
+          name: Build Images
+          command: |
+            docker build --build-arg NPM_TOKEN=${NPM_TOKEN} --file ./chrome/Dockerfile --cache-from=projectstorm -t projectstorm/chrome:${CIRCLE_TAG} .
+      - run:
+          name: Push Images
+          command: |
+            docker push "projectstorm/chrome:${CIRCLE_TAG}"
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/projectstorm.tar
